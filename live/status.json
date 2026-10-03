@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-03T20:54:42.527892+00:00",
+  "generated_at": "2026-10-03T20:55:47.973333+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -14,8 +14,8 @@
     {
       "id": "visual",
       "title": "Визуалы",
-      "level": "error",
-      "detail": "Обнаружена ошибка"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     },
     {
       "id": "telegram",
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-03T20:54:42.527892+00:00",
+    "generated_at": "2026-10-03T20:55:47.973333+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -91,7 +91,7 @@
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-03T20:54:42.527892+00:00",
+    "generated_at": "2026-10-03T20:55:47.973333+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
@@ -111,7 +111,7 @@
       }
     }
   },
-  "failed_visual_count": 8,
+  "failed_visual_count": 0,
   "rostok": {
     "published_today": 0,
     "daily_limit": 4,
