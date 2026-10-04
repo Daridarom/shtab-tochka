@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-04T02:55:07.513400+00:00",
+  "generated_at": "2026-10-04T02:56:14.519694+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-04T02:55:07.513400+00:00",
+    "generated_at": "2026-10-04T02:56:14.519694+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -91,7 +91,7 @@
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-04T02:55:07.513400+00:00",
+    "generated_at": "2026-10-04T02:56:14.519694+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
