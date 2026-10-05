@@ -1,5 +1,5 @@
 name: CI
-# Проверка веток до слияния в main: тесты модели и сборка MAX-приложения. Ничего не публикует.
+# Проверка веток до слияния в main: identity, тесты модели и сборка MAX-приложения. Ничего не публикует.
 on:
   push:
     branches-ignore: [main, telemetry]
@@ -13,6 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Repository identity receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "Daridarom/shtab-tochka"
+          echo "REPOSITORY=$GITHUB_REPOSITORY"
+          echo "REF=$GITHUB_REF"
+          echo "COMMIT=$GITHUB_SHA"
+          git remote get-url origin
+          git rev-parse HEAD
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -36,3 +47,18 @@ jobs:
           grep -q "Контур доказуемой работы" "$js"
           grep -q "Окончание не указано" "$js"
           if grep -q "__SHTAB_PRIVATE__" "$js"; then echo "::error::Тестовые данные разработки попали в сборку"; exit 1; fi
+      - name: Evidence receipt
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Evidence receipt"
+            echo "- repository: `$GITHUB_REPOSITORY`"
+            echo "- ref: `$GITHUB_REF`"
+            echo "- commit: `$GITHUB_SHA`"
+            echo "- CI job: `$GITHUB_JOB`"
+            echo "- run: `$GITHUB_RUN_ID`"
+            echo "- result: see job conclusion and step results above"
+            echo "- browser smoke: required separately for user-facing changes"
+            echo "- independent review: required before DONE"
+          } >> "$GITHUB_STEP_SUMMARY"
