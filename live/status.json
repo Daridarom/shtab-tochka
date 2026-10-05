@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-05T15:28:58.518534+00:00",
+  "generated_at": "2026-10-05T15:30:04.490758+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-05T15:28:58.518534+00:00",
+    "generated_at": "2026-10-05T15:30:04.490758+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -85,13 +85,13 @@
     "visibility": "private",
     "proposal_count": 11,
     "today_complete": false,
-    "stale_rows": 0,
+    "stale_rows": 6,
     "missing_sources": [],
-    "missing_source_count": 0
+    "missing_source_count": 8
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-05T15:28:58.518534+00:00",
+    "generated_at": "2026-10-05T15:30:04.490758+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
