@@ -2,155 +2,112 @@
   "schema": 1,
   "generated_at": "2026-09-30T07:15:44.156317+00:00",
   "ttl_seconds": 120,
+  "visibility": "public_aggregates",
+  "detail_available": false,
   "cards": [
     {
       "id": "system",
       "title": "Система",
       "level": "ok",
-      "detail": "Канал управления: работает · процессы: работает · свободно 189.2 ГБ"
+      "detail": "Проверка пройдена"
     },
     {
       "id": "visual",
       "title": "Визуалы",
       "level": "warn",
-      "detail": "2 задания ожидают возобновления генератора"
+      "detail": "Требует внимания"
     },
     {
       "id": "telegram",
       "title": "Telegram",
       "level": "ok",
-      "detail": "Получатель: работает · записей: 12"
+      "detail": "Проверка пройдена"
     },
     {
       "id": "max",
       "title": "MAX",
       "level": "ok",
-      "detail": "Получатель: работает · записей: 537"
+      "detail": "Проверка пройдена"
     },
     {
       "id": "drive",
       "title": "Google Drive",
       "level": "ok",
-      "detail": "Контекст проверен"
+      "detail": "Проверка пройдена"
     },
     {
       "id": "task_index",
       "title": "Индекс задач",
       "level": "warn",
-      "detail": "Локальный индекс работает · облачная копия ожидает обновления"
+      "detail": "Требует внимания"
     },
     {
       "id": "queue",
       "title": "GitHub queue",
       "level": "ok",
-      "detail": "Ожидают: 0 · проверка связи 7 с назад"
+      "detail": "Проверка пройдена"
     },
     {
       "id": "rostok",
       "title": "Росток",
       "level": "ok",
-      "detail": "Сегодня: 1 из 4 · в очереди: 0 · следующий слот: сегодня 13:00 · всего опубликовано: 61 · ожидают изображения: 6 · согласование: 1 · заблокировано: 63"
+      "detail": "Проверка пройдена"
     },
     {
       "id": "publications",
       "title": "Публикации",
       "level": "ok",
-      "detail": "Неясная доставка: 0 · ошибки доставки: 0"
+      "detail": "Проверка пройдена"
     }
   ],
-  "workflows": [
-    {
-      "id": "shtabHealth01",
-      "name": "Здоровье AI-Штаба",
-      "active": true,
-      "runtime_running": true,
-      "execution_recent": true,
-      "last_status": "success"
-    },
-    {
-      "id": "shtabIntake01",
-      "name": "Входящие Telegram и MAX",
-      "active": true,
-      "runtime_running": true,
-      "execution_recent": true,
-      "last_status": "success"
-    },
-    {
-      "id": "shtabPublications01",
-      "name": "Росток и публикации",
-      "active": true,
-      "runtime_running": true,
-      "execution_recent": true,
-      "last_status": "success"
-    }
-  ],
+  "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-09-30T06:33:54.032032+00:00",
-    "ttl_seconds": 7200,
+    "generated_at": "2026-09-30T07:15:44.156317+00:00",
+    "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
-    "scope": [
-      "ai-radar",
-      "ai-shtab-os",
-      "kinouroki",
-      "media-factory",
-      "privet-planeta",
-      "reo-crimea",
-      "rko"
-    ],
-    "items": [
-      {
-        "id": "54c68a998766e1ba",
-        "project": "rko",
-        "title": "Дождаться завершения переноса электронной библиотеки и затем проверить результат без повторной загрузки дублей.",
-        "status": "OPEN",
-        "deadline": null,
-        "fresh": true,
-        "verified_at": "2026-09-30T06:33:48.044017+00:00"
-      }
-    ],
-    "proposal_count": 1,
+    "scope": [],
+    "items": [],
+    "detail_available": false,
+    "visibility": "private",
+    "proposal_count": null,
     "today_complete": false,
-    "stale_rows": 0,
-    "missing_sources": [
-      "ai-radar",
-      "ai-shtab-os",
-      "media-factory",
-      "privet-planeta"
-    ]
+    "stale_rows": null,
+    "missing_sources": [],
+    "missing_source_count": 0
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
     "generated_at": "2026-09-30T07:15:44.156317+00:00",
     "ttl_seconds": 120,
+    "detail_available": false,
     "channels": {
       "telegram": {
-        "read_ok": true,
-        "total": 12,
-        "last_24h": 1,
-        "last_message_at": "2026-09-29T20:33:34+00:00",
+        "read_ok": false,
+        "total": null,
+        "last_24h": null,
+        "last_message_at": null,
         "attention_count": 0
       },
       "max": {
-        "read_ok": true,
-        "total": 537,
-        "last_24h": 17,
-        "last_message_at": "2026-09-30T06:35:12.658420+00:00",
-        "attention_count": 19
+        "read_ok": false,
+        "total": null,
+        "last_24h": null,
+        "last_message_at": null,
+        "attention_count": 0
       }
-    },
-    "detail_available": false
+    }
   },
-  "failed_visual_count": 2,
+  "failed_visual_count": 0,
   "rostok": {
-    "published_today": 1,
-    "daily_limit": 4,
-    "unresolved": 0,
-    "next_slot": "2026-09-30T13:00+03:00",
+    "published_today": null,
+    "daily_limit": null,
+    "unresolved": null,
+    "next_slot": null,
     "queue": 0,
-    "total_published": 61
+    "total_published": null
   },
-  "publication_unresolved": 0,
-  "publication_delivery_errors": 0
+  "publication_unresolved": null,
+  "publication_delivery_errors": null
 }

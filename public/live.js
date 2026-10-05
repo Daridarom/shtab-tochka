@@ -12,8 +12,8 @@ export const CALENDAR_URLS=[
  'https://raw.githubusercontent.com/Daridarom/shtab-tochka/telemetry/live/calendar.json',
  'https://raw.githubusercontent.com/Daridarom/shtab-tochka/main/live/calendar.json'
 ];
-const CACHE_KEY='shtab.lastState.v1';
-const CALENDAR_CACHE_KEY='shtab.lastCalendar.v1';
+const CACHE_KEY='shtab.lastState.v2.aggregates';
+const CALENDAR_CACHE_KEY='shtab.lastCalendar.v2.private';
 
 // ---------- вспомогательное ----------
 export function level(x){return x==='error'?'err':x==='warn'||x==='unknown'?'wait':'ok';}
@@ -74,6 +74,7 @@ function humanCheck(code){
 // Что случилось, что это значит для дела и что сделать. Техника уходит в «подробности».
 function explainCard(c){
  const d=fixPlural(c.detail||'');const lv=level(c.level);
+ if(c.detail_available===false)return {level:lv,key:c.id,title:humanName(c.id,c.title),text:d||'Требует проверки',action:'Открыть подробности в локальном ЦУП',details:null};
  const it={level:lv,key:c.id,title:humanName(c.id,c.title),text:d||'требует проверки',action:null,details:null};
  switch(c.id){
   case 'visual':{const m=/(\d+)/.exec(d);const n=m?+m[1]:null;
@@ -137,7 +138,7 @@ export async function fetchLive(urls=LIVE_URLS){
    const r=await fetch(url+'?t='+Date.now(),{cache:'no-store'});
    if(!r.ok)return null;
    const raw=await r.json();
-   if(!raw||!raw.generated_at)return null;
+   if(!raw||!raw.generated_at||raw.visibility!=='public_aggregates'||raw.detail_available!==false)return null;
    const ts=Date.parse(raw.generated_at);
    return {raw,ts:Number.isFinite(ts)?ts:0,source:url.includes('/telemetry/')?'telemetry-branch':'main-branch'};
   }catch(e){return null;}
@@ -147,7 +148,8 @@ export async function fetchLive(urls=LIVE_URLS){
 
 export function normalizeCalendar(raw){
  if(!raw||raw.schema!=='calendar-1'||!raw.generated_at||!Array.isArray(raw.events))return null;
- const events=raw.events.map(e=>{
+ const privateDetails=raw.visibility==='private'||raw.detail_available===false;
+ const events=(privateDetails?[]:raw.events).map(e=>{
   if(!e||!e.id||!e.start)return null;
   return {
    id:String(e.id),title:String(e.title||'Событие'),kind:e.kind||'other',start:e.start,end:e.end||null,
@@ -155,7 +157,7 @@ export function normalizeCalendar(raw){
    project:e.project||null,source:'Google Calendar'
   };
  }).filter(Boolean);
- return {schema:'calendar-1',generated_at:raw.generated_at,ttl_seconds:raw.ttl_seconds||21600,events};
+ return {schema:'calendar-1',generated_at:raw.generated_at,ttl_seconds:raw.ttl_seconds||21600,events,visibility:raw.visibility||null,detail_available:!privateDetails,source_status:raw.source_status||null};
 }
 export async function fetchCalendar(urls=CALENDAR_URLS){
  const hits=await Promise.all(urls.map(async url=>{
@@ -163,7 +165,7 @@ export async function fetchCalendar(urls=CALENDAR_URLS){
    const r=await fetch(url+'?t='+Date.now(),{cache:'no-store'});
    if(!r.ok)return null;
    const raw=normalizeCalendar(await r.json());
-   if(!raw)return null;
+   if(!raw||raw.visibility!=='private'||raw.detail_available!==false)return null;
    const ts=Date.parse(raw.generated_at);
    return {raw,ts:Number.isFinite(ts)?ts:0,source:url.includes('/telemetry/')?'telemetry-calendar':'main-calendar'};
   }catch(e){return null;}
@@ -174,7 +176,8 @@ export async function fetchCalendar(urls=CALENDAR_URLS){
 export function normalizeTaskSummary(raw){
  if(!raw||raw.schema!=='tasks-public-1'||!raw.generated_at||!Array.isArray(raw.items))return null;
  const allowedStatus=new Set(['OPEN','IN_PROGRESS','WAITING','BLOCKED','DONE','PROPOSED','DEFERRED','HOLD','ON_HOLD']);
- const items=raw.items.map(x=>{
+ const privateDetails=raw.visibility==='private'||raw.detail_available===false;
+ const items=(privateDetails?[]:raw.items).map(x=>{
   if(!x||!x.id||!x.title)return null;
   const status=String(x.status||'OPEN').toUpperCase();
   return {id:String(x.id),title:short(x.title,240),status:allowedStatus.has(status)?status:'OPEN',
@@ -182,7 +185,7 @@ export function normalizeTaskSummary(raw){
  }).filter(Boolean);
  return {schema:'tasks-public-1',generated_at:raw.generated_at,ttl_seconds:raw.ttl_seconds||7200,
   authority:raw.authority||'project TASKS',partial:raw.partial!==false,scope:Array.isArray(raw.scope)?raw.scope:[],
-  items,proposal_count:Number.isFinite(raw.proposal_count)?raw.proposal_count:null,today_complete:raw.today_complete===true,
+  visibility:raw.visibility||null,detail_available:!privateDetails,items,proposal_count:Number.isFinite(raw.proposal_count)?raw.proposal_count:null,today_complete:raw.today_complete===true,
   stale_rows:Number.isFinite(raw.stale_rows)?raw.stale_rows:0,
   missing_sources:Array.isArray(raw.missing_sources)?raw.missing_sources.filter(x=>typeof x==='string').slice(0,50):[]};
 }
@@ -229,7 +232,7 @@ function workflowRow(w){
 }
 
 export function toState(raw,now=Date.now()){
- const cards=Array.isArray(raw.cards)?raw.cards:[];
+ const cards=(Array.isArray(raw.cards)?raw.cards:[]).map(c=>raw.detail_available===false?{...c,detail_available:false}:c);
  const wfs=Array.isArray(raw.workflows)?raw.workflows:[];
  const active=wfs.filter(w=>w.active&&w.runtime_running&&w.execution_recent&&w.last_status==='success').length;
  const attention=cards.filter(c=>c.level==='warn'||c.level==='error'||c.level==='unknown').length;
@@ -265,9 +268,9 @@ export function toState(raw,now=Date.now()){
 }
 
 // ---------- кэш последнего состояния (localStorage, только безопасная проекция) ----------
-function readCache(){try{const j=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return j&&j.raw&&j.raw.generated_at?j:null;}catch(e){return null;}}
+function readCache(){try{localStorage.removeItem('shtab.lastState.v1');const j=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return j&&j.raw&&j.raw.generated_at&&j.raw.visibility==='public_aggregates'&&j.raw.detail_available===false?j:null;}catch(e){return null;}}
 function writeCache(raw,source){try{localStorage.setItem(CACHE_KEY,JSON.stringify({savedAt:Date.now(),raw,source}));}catch(e){}}
-function readCalendarCache(){try{const j=JSON.parse(localStorage.getItem(CALENDAR_CACHE_KEY)||'null');return j&&j.raw&&j.raw.generated_at?j:null;}catch(e){return null;}}
+function readCalendarCache(){try{localStorage.removeItem('shtab.lastCalendar.v1');const j=JSON.parse(localStorage.getItem(CALENDAR_CACHE_KEY)||'null');return j&&j.raw&&j.raw.generated_at&&j.raw.visibility==='private'&&j.raw.detail_available===false?j:null;}catch(e){return null;}}
 function writeCalendarCache(raw,source){try{localStorage.setItem(CALENDAR_CACHE_KEY,JSON.stringify({savedAt:Date.now(),raw,source}));}catch(e){}}
 
 function finish(raw,source,now,offline){

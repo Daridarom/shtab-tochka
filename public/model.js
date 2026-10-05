@@ -1,7 +1,7 @@
 // Штаб.Точка · единая модель рабочего слоя ЦУП.
 // PROJECT · TASK · EVENT · DOCUMENT · INBOX_ITEM · SYSTEM_NODE — разные экраны показывают одни и те же сущности.
 // Здесь нет данных: только нормализация, правила отображения и состояние источников.
-// Задачи и входящие остаются приватными. Для календаря допустима отдельная безопасная общая проекция без описаний, участников и служебных ссылок.
+// Задачи, события и входящие остаются приватными; публичный канал передаёт только агрегаты.
 
 // ---------- состояние источника ----------
 // LIVE / STALE / OFFLINE / SYNCING / ERROR + NOT_CONNECTED (источник к экрану ещё не подключён).
@@ -90,7 +90,7 @@ export function resultEvidence(s={}){
 // ---------- защищённый слой ----------
 // Сейчас приватного канала к ЦУП нет: возвращаем честное «не подключён», ничего не симулируем.
 // Когда канал появится, он должен вернуть снимок {schema:'private-1',generated_at,ttl_seconds,events[],tasks[],inbox[]}.
-export const PRIVATE_REASON='Защищённый канал для задач и входящих ещё не настроен. В публичную телеметрию эти данные не передаются';
+export const PRIVATE_REASON='Защищённый канал для задач, календаря и входящих ещё не настроен. В публичную телеметрию эти данные не передаются';
 export function emptyPrivate(){
  const src={state:SOURCE.NOT_CONNECTED,reason:PRIVATE_REASON,ageSeconds:null,asOf:null};
  return {source:src,calendarSource:src,taskSource:src,inboxSource:src,events:[],tasks:[],inbox:[]};
@@ -106,6 +106,7 @@ export function fromPrivateSnapshot(raw,now=Date.now()){
 
 export function fromPublicCalendar(raw,now=Date.now()){
  if(!raw)return null;
+ if(raw.visibility==='private'||raw.detail_available===false)return {source:{state:SOURCE.NOT_CONNECTED,reason:'События скрыты из публичного доступа. '+PRIVATE_REASON,ageSeconds:null,asOf:null},events:[]};
  if(!['calendar-1','calendar-public-1'].includes(raw.schema))return {source:{state:SOURCE.ERROR,reason:'неизвестный формат календаря',ageSeconds:null,asOf:null},events:[]};
  const src=sourceFromSnapshot(raw.generated_at,raw.ttl_seconds,now);
  return {source:src,events:(raw.events||[]).map(normalizeEvent).filter(Boolean)};
@@ -114,6 +115,7 @@ export function fromPublicCalendar(raw,now=Date.now()){
 
 export function fromPublicTasks(raw,now=Date.now()){
  if(!raw)return null;
+ if(raw.visibility==='private'||raw.detail_available===false)return {source:{state:SOURCE.NOT_CONNECTED,reason:PRIVATE_REASON,ageSeconds:null,asOf:null,partial:true},tasks:[],meta:{partial:true}};
  if(raw.schema!=='tasks-public-1')return {source:{state:SOURCE.ERROR,reason:'неизвестный формат среза задач',ageSeconds:null,asOf:null,partial:true},tasks:[],meta:{partial:true}};
  let src=sourceFromSnapshot(raw.generated_at,raw.ttl_seconds,now);
  const staleRows=Number(raw.stale_rows)||0;

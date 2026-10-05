@@ -204,7 +204,7 @@ export function CalendarScreen({priv,openSheet,store}){
   </Card>
   <Card title="Типы событий" className="span2">
    <div className="chips">{Object.entries(M.EVENT_KINDS).filter(([k])=>k!=='other').map(([k,v])=><Chip key={k} tone={'k-'+k}>{v.title}</Chip>)}</div>
-   <p className="empty">В ЦУП передаётся только общая карточка календаря: название, время, тип и при необходимости место. Описания, участники, служебные идентификаторы и внутренние ссылки не публикуются.</p>
+   <p className="empty">События скрыты в публичном ЦУПе. Подключение защищённого доступа ещё не настроено.</p>
   </Card>
  </div>;
 }
