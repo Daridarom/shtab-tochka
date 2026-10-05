@@ -1,0 +1,14 @@
+{
+  "name": "shtab-tochka-payments-bot",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Бот «Офис АИ» в MAX: напоминания об оплатах из Google Таблицы и отметка «Оплачено» с фото чека",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node index.js",
+    "check": "node index.js --check",
+    "dry-run": "node index.js --dry-run",
+    "test": "node ../../tests/payments.test.mjs"
+  }
+}

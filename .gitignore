@@ -3,3 +3,8 @@ max/node_modules/
 # Сборка MAX-приложения делается в CI при деплое, в репозитории не хранится
 public/max/
 _site/
+# Бот оплат: состояние и ключи никогда не коммитим
+bot/payments/state/
+.env
+.env.*
+*service-account*.json
