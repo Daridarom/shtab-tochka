@@ -20,7 +20,8 @@ jobs:
           test "$GITHUB_REPOSITORY" = "Daridarom/shtab-tochka"
           echo "REPOSITORY=$GITHUB_REPOSITORY"
           echo "REF=$GITHUB_REF"
-          echo "COMMIT=$GITHUB_SHA"
+          echo "TESTED_SHA=$GITHUB_SHA"
+          echo "SOURCE_SHA=${{ github.event.pull_request.head.sha || github.sha }}"
           git remote get-url origin
           git rev-parse HEAD
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
