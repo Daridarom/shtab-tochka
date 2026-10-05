@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-05T21:16:59.225376+00:00",
+  "generated_at": "2026-10-05T21:18:06.504615+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -62,20 +62,20 @@
     {
       "id": "rostok",
       "title": "Росток",
-      "level": "error",
-      "detail": "Обнаружена ошибка"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     },
     {
       "id": "publications",
       "title": "Публикации",
-      "level": "error",
-      "detail": "Обнаружена ошибка"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     }
   ],
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-05T21:16:59.225376+00:00",
+    "generated_at": "2026-10-05T21:18:06.504615+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -91,7 +91,7 @@
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-05T21:16:59.225376+00:00",
+    "generated_at": "2026-10-05T21:18:06.504615+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
