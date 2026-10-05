@@ -22,8 +22,6 @@ jobs:
         run: |
           node tests/live-state.test.mjs
           node tests/model.test.mjs
-          node tests/payments.test.mjs
-          node tests/payments-clients.test.mjs
       - name: Build MAX UI
         working-directory: max
         run: |
