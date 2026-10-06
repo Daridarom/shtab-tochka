@@ -56,6 +56,9 @@ h1{margin:0;font-size:clamp(30px,5vw,62px);line-height:.98;letter-spacing:-.055e
 .layer-tab{font-size:12px;color:#8f9fbe;padding:9px}
 .layer-tab.is-active{color:#fff;border-color:rgba(131,199,255,.48);background:rgba(92,153,214,.15)}
 .story-panel{min-height:330px}
+.simple-summary{margin:0 0 12px;padding:14px 15px;border-radius:14px;border:1px solid rgba(131,199,255,.25);background:linear-gradient(135deg,rgba(83,146,208,.12),rgba(255,255,255,.025))}
+.simple-summary b{display:block;margin-bottom:5px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#89b9e6}
+.simple-summary p{margin:0;color:#e6edf9;font-size:15px;line-height:1.55}
 .fact-grid{display:grid;gap:9px}
 .fact-item{padding:11px 12px;border:1px solid rgba(145,166,211,.13);border-radius:13px;background:rgba(255,255,255,.025)}
 .fact-item b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8497bc;margin-bottom:5px}
