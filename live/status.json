@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-06T08:57:59.495041+00:00",
+  "generated_at": "2026-10-06T08:59:09.531996+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -56,8 +56,8 @@
     {
       "id": "queue",
       "title": "GitHub queue",
-      "level": "ok",
-      "detail": "Проверка пройдена"
+      "level": "warn",
+      "detail": "Требует внимания"
     },
     {
       "id": "rostok",
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-06T08:57:59.495041+00:00",
+    "generated_at": "2026-10-06T08:59:09.531996+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -91,7 +91,7 @@
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-06T08:57:59.495041+00:00",
+    "generated_at": "2026-10-06T08:59:09.531996+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
