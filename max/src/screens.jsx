@@ -70,7 +70,8 @@ function cardTone(s,id){
 function OperationalPicture({s,priv,age}){
  const freshness=M.operationalFreshness(s,priv,age??s.ageSeconds??null);
  const evidence=M.resultEvidence(s);
- const proc=s.metrics.active!=null&&s.metrics.total!=null?s.metrics.active+' из '+s.metrics.total:'—';
+ const proc=s.metrics.total>0&&s.metrics.active!=null?s.metrics.active+' из '+s.metrics.total:'—';
+ const procDetail=s.metrics.total>0?'технически запущены и недавно отработали':'детальный список процессов не публикуется в этом срезе';
  const rostok=s.rostok?(s.rostok.publishedToday!=null&&s.rostok.dailyLimit!=null?s.rostok.publishedToday+' из '+s.rostok.dailyLimit:s.rostok.publishedToday??'—'):'—';
  const next=s.rostok?.nextSlotLabel||'—';
  const freshnessTone=M.sourceLevel(freshness.state);
@@ -79,7 +80,7 @@ function OperationalPicture({s,priv,age}){
  const verdict=s.verdict?.text||(s.mode==='loading'?'Получаем состояние':'Состояние не подтверждено');
  return <Card title="Оперативная картина" aside={verdict} className="span2 commandCard">
   <div className="commandGrid">
-   <div className="commandMetric"><small>Сервисы</small><b>{proc}</b><em>технически запущены и недавно отработали</em></div>
+   <div className="commandMetric"><small>Сервисы</small><b>{proc}</b><em>{procDetail}</em></div>
    <div className={'commandMetric '+freshnessTone}><small>Данные</small><b>{freshness.fresh} из {freshness.total}</b><em>источников свежие</em></div>
    <div className="commandMetric"><small>Результат</small><b>{rostok}</b><em>публикаций Ростка сегодня · следующий слот {next}</em></div>
    <div className={'commandMetric '+evidence.level}><small>Подтверждение</small><b>{evidence.label}</b><em>{evidence.detail}</em></div>
