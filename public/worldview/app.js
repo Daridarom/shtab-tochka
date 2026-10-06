@@ -206,7 +206,9 @@ function clearGroup(group){
 }
 
 function mat(color,opts={}){
-  return new THREE.MeshStandardMaterial({color,roughness:.45,metalness:.08,...opts});
+  const m=new THREE.MeshStandardMaterial({color,roughness:.45,metalness:.08,...opts});
+  m.userData.baseEmissiveIntensity=m.emissiveIntensity||0;
+  return m;
 }
 function sphere(r,color,pos=[0,0,0],opts={}){
   const m=new THREE.Mesh(new THREE.SphereGeometry(r,32,22),mat(color,opts));
@@ -337,13 +339,22 @@ function drawUniverse(){
 }
 
 function layerHighlight(id){
-  // В текущей версии подсветка принципа — смысловая: само 3D остаётся моделью масштаба.
+  clearLayerHighlight();
   world.traverse(o=>{
-    if(o.material && "emissiveIntensity" in o.material)o.material.emissiveIntensity=Math.min(1.1,(o.material.emissiveIntensity||0)+.18);
+    const m=o.material;
+    if(m && "emissiveIntensity" in m){
+      const base=m.userData?.baseEmissiveIntensity ?? m.emissiveIntensity ?? 0;
+      m.emissiveIntensity=Math.min(1.1,base+.18);
+    }
   });
 }
 function clearLayerHighlight(){
-  // Перерисовка масштаба вернёт исходные материалы; здесь достаточно убрать выбранное состояние панели.
+  world.traverse(o=>{
+    const m=o.material;
+    if(m && "emissiveIntensity" in m && m.userData?.baseEmissiveIntensity!==undefined){
+      m.emissiveIntensity=m.userData.baseEmissiveIntensity;
+    }
+  });
 }
 
 function createStarfield(){
@@ -375,6 +386,5 @@ renderAll();
 
 renderer.setAnimationLoop(()=>{
   controls.update();
-  if(!prefersReduced)world.rotation.y+=.00035;
   renderer.render(scene,camera);
 });
