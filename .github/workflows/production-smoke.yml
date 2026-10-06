@@ -96,8 +96,11 @@ jobs:
           assert data.get('schema')=='calendar-1'
           assert data.get('generated_at')
           assert isinstance(data.get('events'),list)
-          allowed_top={'schema','generated_at','ttl_seconds','events'}
+          allowed_top={'schema','generated_at','ttl_seconds','events','visibility','detail_available','source_status'}
           assert set(data)<=allowed_top, set(data)-allowed_top
+          assert data.get('visibility')=='private'
+          assert data.get('detail_available') is False
+          assert data.get('source_status') in {'available','empty','unavailable'}
           allowed_event={'id','title','kind','start','end','endConfirmed','allDay','format','location','project'}
           forbidden={'description','attendees','joinUrl','url','web_link','hangout_link','organizer','email'}
           for e in data['events']:
