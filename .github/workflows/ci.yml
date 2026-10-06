@@ -48,6 +48,25 @@ jobs:
           grep -q "Контур доказуемой работы" "$js"
           grep -q "Окончание не указано" "$js"
           if grep -q "__SHTAB_PRIVATE__" "$js"; then echo "::error::Тестовые данные разработки попали в сборку"; exit 1; fi
+      - name: Real browser smoke (built UI)
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome
+          python3 -m http.server 4173 --directory public >/tmp/shtab-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in {1..20}; do
+            curl -fsS http://127.0.0.1:4173/max/ >/dev/null && break
+            sleep 0.5
+          done
+          google-chrome --headless=new --no-sandbox --disable-gpu             --virtual-time-budget=5000             --dump-dom http://127.0.0.1:4173/max/ > /tmp/max-dom.html
+          grep -q "Штаб.Точка MAX" /tmp/max-dom.html
+          google-chrome --headless=new --no-sandbox --disable-gpu             --window-size=390,844             --screenshot=/tmp/max-mobile.png             http://127.0.0.1:4173/max/
+          test -s /tmp/max-mobile.png
+          echo "BROWSER_SMOKE=OK"
+          echo "BROWSER_VIEWPORT=390x844"
+
       - name: Evidence receipt
         if: always()
         shell: bash
@@ -60,6 +79,6 @@ jobs:
             echo "- CI job: `$GITHUB_JOB`"
             echo "- run: `$GITHUB_RUN_ID`"
             echo "- result: see job conclusion and step results above"
-            echo "- browser smoke: required separately for user-facing changes"
+            echo "- browser smoke: real Chrome smoke runs in this CI; deployed preview/production smoke remains required before production DONE"
             echo "- independent review: required before DONE"
           } >> "$GITHUB_STEP_SUMMARY"
