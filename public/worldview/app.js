@@ -110,9 +110,10 @@ function renderStory(){
   if(layer==="mechanism"){
     els.storyPanel.innerHTML=
       '<div class="evidence-badge">'+escapeHtml(EVIDENCE[s.evidence]?.label||"Научное знание")+'</div>'+
+      '<div class="simple-summary"><b>Коротко</b><p>'+escapeHtml(s.simple)+'</p></div>'+
       '<div class="fact-grid">'+
-      fact("Целое",s.whole)+fact("Части",s.parts)+fact("Что связывает",s.binds)+
-      fact("Что проходит",s.flow)+fact("Как сохраняется",s.stability)+fact("Что возникает нового",s.emergence)+
+      fact("Что здесь целое?",s.whole)+fact("Из чего состоит?",s.parts)+fact("Что связывает части?",s.binds)+
+      fact("Что движется и обменивается?",s.flow)+fact("Как система сохраняется?",s.stability)+fact("Что нового появляется у целого?",s.emergence)+
       '</div>';
     return;
   }
@@ -128,7 +129,7 @@ function renderStory(){
       '<div class="source-list">'+s.sources.map(src=>
         '<div class="source-card"><strong>'+escapeHtml(src.label)+'</strong><p>'+escapeHtml(src.note)+'</p></div>'
       ).join("")+
-      '<div class="source-card"><strong>Правило источников</strong><p>Следующая версия будет хранить страницу или конкретный фрагмент для каждого содержательного утверждения из нашей библиотеки. Общенаучные утверждения будут отделены от авторских концепций.</p></div>'+
+      '<div class="source-card"><strong>Как читаем источники</strong><p>По мере чтения библиотеки мы будем привязывать к ключевым утверждениям конкретные страницы и фрагменты. Научные данные, авторские модели и философские выводы будут храниться раздельно.</p></div>'+
       '</div>';
     return;
   }
