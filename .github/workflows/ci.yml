@@ -64,8 +64,21 @@ jobs:
           grep -q "Штаб.Точка MAX" /tmp/max-dom.html
           google-chrome --headless=new --no-sandbox --disable-gpu             --window-size=390,844             --screenshot=/tmp/max-mobile.png             http://127.0.0.1:4173/max/
           test -s /tmp/max-mobile.png
+          mkdir -p evidence
+          cp /tmp/max-dom.html evidence/max-dom.html
+          cp /tmp/max-mobile.png evidence/max-mobile-390x844.png
+          printf "repository=%s\ntested_sha=%s\nsource_sha=%s\nviewport=390x844\n" "$GITHUB_REPOSITORY" "$GITHUB_SHA" "${{ github.event.pull_request.head.sha || github.sha }}" > evidence/browser-smoke.txt
           echo "BROWSER_SMOKE=OK"
           echo "BROWSER_VIEWPORT=390x844"
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Evidence receipt
         if: always()
