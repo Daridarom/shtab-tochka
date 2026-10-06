@@ -1,5 +1,5 @@
 name: CI
-# Проверка веток до слияния в main: тесты модели и сборка MAX-приложения. Ничего не публикует.
+# Проверка веток до слияния в main: identity, тесты модели и сборка MAX-приложения. Ничего не публикует.
 on:
   push:
     branches-ignore: [main, telemetry]
@@ -13,6 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Repository identity receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "Daridarom/shtab-tochka"
+          echo "REPOSITORY=$GITHUB_REPOSITORY"
+          echo "REF=$GITHUB_REF"
+          echo "TESTED_SHA=$GITHUB_SHA"
+          echo "SOURCE_SHA=${{ github.event.pull_request.head.sha || github.sha }}"
+          git remote get-url origin
+          git rev-parse HEAD
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -36,3 +48,50 @@ jobs:
           grep -q "Контур доказуемой работы" "$js"
           grep -q "Окончание не указано" "$js"
           if grep -q "__SHTAB_PRIVATE__" "$js"; then echo "::error::Тестовые данные разработки попали в сборку"; exit 1; fi
+      - name: Real browser smoke (built UI)
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome
+          python3 -m http.server 4173 --directory public >/tmp/shtab-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in {1..20}; do
+            curl -fsS http://127.0.0.1:4173/max/ >/dev/null && break
+            sleep 0.5
+          done
+          google-chrome --headless=new --no-sandbox --disable-gpu             --virtual-time-budget=5000             --dump-dom http://127.0.0.1:4173/max/ > /tmp/max-dom.html
+          grep -q "Штаб.Точка MAX" /tmp/max-dom.html
+          google-chrome --headless=new --no-sandbox --disable-gpu             --window-size=390,844             --screenshot=/tmp/max-mobile.png             http://127.0.0.1:4173/max/
+          test -s /tmp/max-mobile.png
+          mkdir -p evidence
+          cp /tmp/max-dom.html evidence/max-dom.html
+          cp /tmp/max-mobile.png evidence/max-mobile-390x844.png
+          printf "repository=%s\ntested_sha=%s\nsource_sha=%s\nviewport=390x844\n" "$GITHUB_REPOSITORY" "$GITHUB_SHA" "${{ github.event.pull_request.head.sha || github.sha }}" > evidence/browser-smoke.txt
+          echo "BROWSER_SMOKE=OK"
+          echo "BROWSER_VIEWPORT=390x844"
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Evidence receipt
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Evidence receipt"
+            echo "- repository: `$GITHUB_REPOSITORY`"
+            echo "- ref: `$GITHUB_REF`"
+            echo "- commit: `$GITHUB_SHA`"
+            echo "- CI job: `$GITHUB_JOB`"
+            echo "- run: `$GITHUB_RUN_ID`"
+            echo "- result: see job conclusion and step results above"
+            echo "- browser smoke: real Chrome smoke runs in this CI; deployed preview/production smoke remains required before production DONE"
+            echo "- independent review: required before DONE"
+          } >> "$GITHUB_STEP_SUMMARY"
