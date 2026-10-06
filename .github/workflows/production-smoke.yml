@@ -63,6 +63,10 @@ jobs:
           python3 - <<'PY'
           import json
           data=json.load(open('/tmp/status.json',encoding='utf-8'))
+          public_text=json.dumps(data,ensure_ascii=False).lower()
+          forbidden=('yandex','яндекс','private-gateway','private_url','cloud-tochka','yc_folder_id','yc_bucket','yc_allowed_user_ids')
+          leaks=[x for x in forbidden if x in public_text]
+          assert not leaks, f'private infrastructure leaked into public telemetry: {leaks}'
           ts=data.get('task_summary')
           if ts is not None:
               assert ts.get('schema')=='tasks-public-1'
@@ -93,6 +97,10 @@ jobs:
           import json
           p='/tmp/calendar.json'
           data=json.load(open(p,encoding='utf-8'))
+          public_text=json.dumps(data,ensure_ascii=False).lower()
+          forbidden=('yandex','яндекс','private-gateway','private_url','cloud-tochka','yc_folder_id','yc_bucket','yc_allowed_user_ids')
+          leaks=[x for x in forbidden if x in public_text]
+          assert not leaks, f'private infrastructure leaked into public calendar projection: {leaks}'
           assert data.get('schema')=='calendar-1'
           assert data.get('generated_at')
           assert isinstance(data.get('events'),list)
