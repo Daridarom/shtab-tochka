@@ -16,7 +16,7 @@ const CACHE_KEY='shtab.lastState.v2.aggregates';
 const CALENDAR_CACHE_KEY='shtab.lastCalendar.v2.private';
 
 // ---------- вспомогательное ----------
-export function level(x){return x==='error'?'err':x==='warn'||x==='unknown'?'wait':'ok';}
+export function level(x){return x==='error'?'err':x==='warn'?'wait':x==='unknown'?'none':'ok';}
 export function humanName(id,title){return ({system:'Компьютер штаба',visual:'Визуалы',drive:'Документы',task_index:'Индекс задач',skills:'Навыки',queue:'Канал управления',rostok:'Росток',publications:'Публикации',telegram:'Telegram',max:'MAX'})[id]||title||id;}
 export function moscowTime(iso,withDate){
  const d=new Date(iso);if(!Number.isFinite(d.getTime()))return '—';
@@ -235,12 +235,12 @@ export function toState(raw,now=Date.now()){
  const cards=(Array.isArray(raw.cards)?raw.cards:[]).map(c=>raw.detail_available===false?{...c,detail_available:false}:c);
  const wfs=Array.isArray(raw.workflows)?raw.workflows:[];
  const active=wfs.filter(w=>w.active&&w.runtime_running&&w.execution_recent&&w.last_status==='success').length;
- const attention=cards.filter(c=>c.level==='warn'||c.level==='error'||c.level==='unknown').length;
+ const attention=cards.filter(c=>c.level==='warn'||c.level==='error').length;
  const systems=cards.map(c=>[humanName(c.id,c.title),level(c.level),fixPlural(c.detail)||'Нет подробностей']);
  const rows=wfs.map(workflowRow);
  if(wfs.length)systems.push(['Автоматические процессы',active===wfs.length?'ok':'wait',active+' из '+wfs.length+' работают штатно']);
  // проблемы на языке управленца, с длительностью
- const items=[...cards.filter(c=>level(c.level)!=='ok').map(explainCard),...rows.map((r,i)=>[r,wfs[i]]).filter(([r])=>r[1]!=='ok').map(([r,w])=>explainWorkflow(r,w))];
+ const items=[...cards.filter(c=>c.level==='warn'||c.level==='error').map(explainCard),...rows.map((r,i)=>[r,wfs[i]]).filter(([r])=>r[1]!=='ok').map(([r,w])=>explainWorkflow(r,w))];
  const since=trackSince(items.map(it=>[it.key,it.level]),now);
  for(const it of items){const s=since[it.key];it.since=s?s.since:now;it.sinceLabel=durationLabel(now-it.since);it.sinceTime=moscowTime(it.since);}
  items.sort((a,b)=>(a.level==='err'?0:1)-(b.level==='err'?0:1)||a.since-b.since);
@@ -248,7 +248,7 @@ export function toState(raw,now=Date.now()){
  const oldest=items.length?items.reduce((m,x)=>Math.min(m,x.since),Infinity):null;
  const oldestLabel=oldest!=null?durationLabel(now-oldest):null;
  const verdict=!items.length?{level:'ok',text:'Всё штатно'}:{level:nErr?'err':'wait',text:[nErr?plural(nErr,'ошибка','ошибки','ошибок'):null,nWarn?plural(nWarn,'предупреждение','предупреждения','предупреждений'):null].filter(Boolean).join(' · ')+(oldestLabel&&oldestLabel!=='только что замечено'?' · старейшая '+oldestLabel.replace('уже ',''):'')};
- const issues=cards.filter(c=>c.level!=='ok').sort((a,b)=>(a.level==='error'?0:1)-(b.level==='error'?0:1));
+ const issues=cards.filter(c=>c.level==='warn'||c.level==='error').sort((a,b)=>(a.level==='error'?0:1)-(b.level==='error'?0:1));
  const events=[
   [moscowTime(raw.generated_at),'Состояние штаба обновлено автоматически','ok'],
   ...issues.slice(0,4).map(c=>['Сейчас',humanName(c.id,c.title)+': '+(fixPlural(c.detail)||'требует проверки'),level(c.level)])

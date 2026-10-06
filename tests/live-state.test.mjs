@@ -76,6 +76,19 @@ assert.equal(taskIndexState.focus[0].title,'Индекс задач');
 assert.match(taskIndexState.focus[0].text,/Локальный индекс задач актуален/);
 console.log('PASS: waiting generator and cloud task index are described as warnings, not fabricated failures');
 
+const unavailableReview=structuredClone(raw);
+unavailableReview.cards=[
+ {id:'system',level:'ok',detail:'Проверка пройдена'},
+ {id:'model_eval',level:'unknown',detail:'Нет подтверждённых данных'},
+ {id:'publications',level:'ok',detail:'Проверка пройдена'}
+];
+const unavailableState=toState(unavailableReview,Date.parse('2026-10-06T02:45:00Z'));
+assert.equal(unavailableState.metrics.attention,0);
+assert.equal(unavailableState.focus.length,0);
+assert.equal(unavailableState.verdict.text,'Всё штатно');
+assert.equal(unavailableState.cards.find(c=>c.id==='model_eval').level,'none');
+console.log('PASS: unavailable optional checks remain neutral and do not become warnings');
+
 const safeTasks=normalizeTaskSummary({schema:'tasks-public-1',generated_at:'2026-09-30T05:00:00Z',items:[{id:'a',title:'Задача',status:'OPEN',project:'rko',source_url:'https://forbidden.example',secret:'x'}],missing_sources:[]});
 assert.equal(safeTasks.items.length,1);assert.equal('source_url' in safeTasks.items[0],false);assert.equal('secret' in safeTasks.items[0],false);
 const safeInbox=normalizeInboxSummary({schema:'inbox-summary-1',generated_at:'2026-09-30T05:00:00Z',channels:{max:{read_ok:true,total:5,last_24h:2,last_message_at:'2026-09-30T04:00:00Z',attention_count:1,source_states:{internal_secret:5},messages:['secret']}}});
