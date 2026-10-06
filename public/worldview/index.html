@@ -4,73 +4,98 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#050816">
-  <title>От атома до Вселенной — 3D карта смыслов</title>
-  <meta name="description" content="Интерактивный 3D-атлас связей: от атома и клетки до биосферы, ноосферы и Вселенной.">
+  <title>От атома до Вселенной — Атлас понимания мира</title>
+  <meta name="description" content="Интерактивное путешествие по масштабам мира: механизм, общий принцип, источник и смысл.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">КАРТА ПОНИМАНИЯ МИРА · ПРОТОТИП</p>
-        <h1>От атома до Вселенной</h1>
-        <p class="subtitle">Вращай пространство, приближай узлы, смотри связи и уровень доказательности.</p>
+<main class="atlas">
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">АТЛАС ПОНИМАНИЯ МИРА · МАРШРУТ 01</p>
+      <h1>От атома до Вселенной</h1>
+      <p class="route-question">Что делает множество частей <strong>единым целым?</strong></p>
+    </div>
+    <div class="hero-actions">
+      <button id="toggleMotion" class="ghost" type="button" aria-pressed="false">Медленное вращение: выкл.</button>
+      <button id="resetCamera" class="ghost" type="button">Вернуть ракурс</button>
+    </div>
+  </header>
+
+  <nav class="scale-track" aria-label="Масштабы мира">
+    <div id="scaleButtons" class="scale-buttons"></div>
+  </nav>
+
+  <section class="workspace">
+    <aside class="left-panel">
+      <div class="stage-index"><span id="stepNumber">01</span><span id="stepTotal">/ 09</span></div>
+      <p id="fieldLabel" class="field-label">физика</p>
+      <h2 id="stageTitle">Атом</h2>
+      <p id="stageScale" class="stage-scale">~10⁻¹⁰ м</p>
+      <p id="stagePrompt" class="stage-prompt"></p>
+
+      <div class="layer-tabs" role="tablist" aria-label="Слои понимания">
+        <button class="layer-tab is-active" type="button" data-layer="mechanism" role="tab">Как устроено</button>
+        <button class="layer-tab" type="button" data-layer="principle" role="tab">Принцип</button>
+        <button class="layer-tab" type="button" data-layer="source" role="tab">Источник</button>
+        <button class="layer-tab" type="button" data-layer="meaning" role="tab">Смысл</button>
       </div>
-      <div class="top-actions">
-        <button id="resetView" type="button">Сбросить вид</button>
-        <button id="toggleRotate" type="button" aria-pressed="true">Автовращение: вкл.</button>
+
+      <div id="storyPanel" class="story-panel" aria-live="polite"></div>
+
+      <div class="step-actions">
+        <button id="prevStage" type="button">← Приблизиться</button>
+        <button id="nextStage" class="primary" type="button">Отдалиться →</button>
       </div>
-    </header>
+    </aside>
 
-    <section class="toolbar" aria-label="Фильтры карты">
-      <label class="search-wrap">
-        <span>Поиск</span>
-        <input id="searchInput" type="search" placeholder="например: клетка, мера, Вернадский">
-      </label>
-
-      <label>
-        <span>Уровень</span>
-        <select id="evidenceFilter">
-          <option value="all">Все уровни</option>
-          <option value="fact">Научный факт / устоявшаяся теория</option>
-          <option value="model">Научная или системная модель</option>
-          <option value="worldview">Мировоззренческая интерпретация</option>
-          <option value="hypothesis">Гипотеза / требует проверки</option>
-        </select>
-      </label>
-
-      <div class="legend" aria-label="Типы узлов">
-        <span><i class="dot dot-scale"></i>масштаб</span>
-        <span><i class="dot dot-principle"></i>принцип</span>
-        <span><i class="dot dot-source"></i>источник</span>
-      </div>
-    </section>
-
-    <section class="stage-wrap">
-      <div id="stage" class="stage" aria-label="Трёхмерная карта смыслов"></div>
-      <div class="stage-hint">мышь/палец — вращать · колесо/щипок — масштаб · нажать узел — раскрыть</div>
-
-      <aside id="detailPanel" class="detail-panel" aria-live="polite">
-        <div class="panel-head">
-          <div>
-            <p id="detailType" class="detail-type">Карта</p>
-            <h2 id="detailTitle">Выбери узел</h2>
-          </div>
-          <button id="closePanel" type="button" aria-label="Закрыть карточку">×</button>
+    <section class="scene-column">
+      <div class="scene-frame">
+        <div id="stage3d" class="stage3d" aria-label="Трёхмерная модель текущего масштаба"></div>
+        <div class="scene-label">
+          <span id="sceneKicker">СХЕМАТИЧЕСКАЯ МОДЕЛЬ</span>
+          <strong id="sceneTitle">Атом</strong>
         </div>
-        <p id="detailSummary" class="detail-summary">Нажми на любой объект в 3D-пространстве. Связанные узлы и линии будут подсвечены.</p>
-        <div id="detailMeta" class="meta-grid"></div>
-        <div id="detailLinks" class="related"></div>
-        <div id="detailSource" class="source-box"></div>
-      </aside>
+        <div class="scene-help">вращай · приближай · смотри как меняется тип целостности</div>
+      </div>
+
+      <article class="bridge-card">
+        <p class="bridge-label">НИТОЧКА</p>
+        <p id="bridgeText"></p>
+      </article>
+
+      <article class="caution-card">
+        <p class="caution-label">НЕ ПЕРЕПУТАТЬ</p>
+        <p id="cautionText"></p>
+      </article>
     </section>
 
-    <footer class="footer-note">
-      <strong>Правило карты:</strong> визуальное сходство не считается доказательством общей природы явлений.
-      Каждая связь хранит собственный уровень уверенности и источник.
-    </footer>
-  </main>
+    <aside class="right-panel">
+      <div>
+        <p class="side-title">Сквозные вопросы</p>
+        <p class="side-intro">Не ищем одинаковые картинки. Проверяем, какие вопросы остаются полезными на разных масштабах.</p>
+      </div>
+      <div id="principleList" class="principle-list"></div>
+      <div id="principleTrace" class="principle-trace" aria-live="polite">
+        <p class="trace-kicker">Выбери принцип</p>
+        <p>Например, «Связь» покажет, на каких уровнях этот вопрос проявляется и где механизмы уже различаются.</p>
+      </div>
+    </aside>
+  </section>
 
-  <script type="module" src="./app.js"></script>
+  <section class="thread-summary">
+    <div>
+      <p class="eyebrow">ПРОМЕЖУТОЧНЫЙ ВЫВОД</p>
+      <h2>Мы ищем не одинаковость мира, а язык отношений.</h2>
+    </div>
+    <p id="threadThesis"></p>
+  </section>
+
+  <footer class="method-note">
+    <strong>Метод:</strong> механизм → повторяющийся принцип → источник → мировоззренческий вопрос.
+    Философская интерпретация никогда не подменяет научное объяснение.
+  </footer>
+</main>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
