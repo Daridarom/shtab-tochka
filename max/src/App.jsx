@@ -8,8 +8,9 @@ import {haptic,useBackButton} from './max.js';
 import {startStarfield} from '../../public/starfield.js';
 import {Sheet} from './ui.jsx';
 import {Today,CalendarScreen,ProjectsScreen,SystemsScreen,InboxScreen,EventSheet,TaskSheet,ProjectPicker,NodeSheet,InboxSheet} from './screens.jsx';
+import {ContentIntelScreen} from './content-intel.jsx';
 
-const TABS=[['home','Сегодня'],['calendar','Календарь'],['projects','Проекты'],['systems','Системы'],['inbox','Входящие']];
+const TABS=[['home','Сегодня'],['calendar','Календарь'],['projects','Проекты'],['intel','Радар','Контент-разведка'],['systems','Системы'],['inbox','Входящие']];
 const store={get(k,d){try{return localStorage.getItem(k)??d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}},json(k,d){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v??d;}catch(e){return d;}}};
 const initial={mode:'loading',verdict:null,notice:null,cards:[],metrics:{active:null,total:null,attention:null,done:null,dailyLimit:null,nextSlotLabel:null,problems:null,oldest:null},focus:[],systems:[],workflows:[],events:[],inbox:[],rostok:null,artifactRuntime:null,taskSummary:null,inboxSummary:null,calendar:null,ageSeconds:null,asOf:null,loadedAt:Date.now()};
 const CHANGES_KEY='shtab.max.taskChanges.v1';
@@ -109,13 +110,14 @@ export default function App({scheme='dark',themeSetting='dark',cycleTheme=()=>{}
 
  return <><Starfield theme={scheme}/><Panel mode="secondary" className={'shell mode-'+s.mode}>
   <header className="top">
-   <div><Typography.Label variant="small" className="eyebrow">ШТАБ.ТОЧКА · MAX</Typography.Label><Typography.Title variant="large-strong" className="title">{TABS.find(t=>t[0]===tab)[1]}</Typography.Title><small className={'status '+s.mode}>{status}</small></div>
+   <div><Typography.Label variant="small" className="eyebrow">ШТАБ.ТОЧКА · MAX</Typography.Label><Typography.Title variant="large-strong" className="title">{TABS.find(t=>t[0]===tab)?.[2]||TABS.find(t=>t[0]===tab)?.[1]}</Typography.Title><small className={'status '+s.mode}>{status}</small></div>
    <div className="tools"><button type="button" className="theme" onClick={()=>{haptic('select');cycleTheme();}} aria-label={'Тема: '+({dark:'тёмная',light:'светлая',auto:'как в MAX'})[themeSetting]} title={'Тема: '+({dark:'тёмная',light:'светлая',auto:'как в MAX'})[themeSetting]}><ThemeIcon setting={themeSetting}/></button><button type="button" className={'refresh'+(busy||s.mode==='loading'?' spin':'')} onClick={onRefresh} aria-label="Обновить"><RefreshIcon/></button></div>
   </header>
   {s.notice&&<div className={'notice '+s.notice.level}>{s.notice.text}</div>}
   {tab==='home'&&<Today s={s} priv={priv} go={setTab} openSheet={openSheet} age={age}/>}
   {tab==='calendar'&&<CalendarScreen priv={priv} openSheet={openSheet}/>}
   {tab==='projects'&&<ProjectsScreen s={s} priv={priv} tasks={tasks} view={view} setView={setView} project={project} openSheet={openSheet} changeTask={changeTask}/>}
+  {tab==='intel'&&<ContentIntelScreen/>}
   {tab==='systems'&&<SystemsScreen s={s} graph={graph} selected={node} onSelect={selectNode}/>}
   {tab==='inbox'&&<InboxScreen s={s} priv={priv} openSheet={openSheet}/>}
   </Panel>
