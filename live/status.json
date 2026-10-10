@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-09T16:10:29.510603+00:00",
+  "generated_at": "2026-10-10T10:18:22.944566+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -8,14 +8,14 @@
     {
       "id": "system",
       "title": "Система",
-      "level": "ok",
-      "detail": "Проверка пройдена"
+      "level": "warn",
+      "detail": "Требует внимания"
     },
     {
       "id": "visual",
       "title": "Визуалы",
-      "level": "warn",
-      "detail": "Требует внимания"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     },
     {
       "id": "telegram",
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-09T16:10:29.510603+00:00",
+    "generated_at": "2026-10-10T10:18:22.944566+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -85,35 +85,35 @@
     "visibility": "private",
     "proposal_count": 11,
     "today_complete": false,
-    "stale_rows": 3,
+    "stale_rows": 5,
     "missing_sources": [],
-    "missing_source_count": 3
+    "missing_source_count": 6
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-09T16:10:29.510603+00:00",
+    "generated_at": "2026-10-10T10:18:22.944566+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
       "telegram": {
         "read_ok": true,
-        "total": 25,
-        "last_24h": 9,
+        "total": 40,
+        "last_24h": 19,
         "last_message_at": null,
         "attention_count": 0
       },
       "max": {
         "read_ok": true,
         "total": 1013,
-        "last_24h": 49,
+        "last_24h": 1,
         "last_message_at": null,
         "attention_count": 30
       }
     }
   },
-  "failed_visual_count": 10,
+  "failed_visual_count": 0,
   "rostok": {
-    "published_today": 1,
+    "published_today": 0,
     "daily_limit": 4,
     "unresolved": 0,
     "next_slot": null,
