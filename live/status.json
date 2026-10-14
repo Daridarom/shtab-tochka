@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-14T17:51:12.871999+00:00",
+  "generated_at": "2026-10-14T18:08:53.729333+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -14,14 +14,14 @@
     {
       "id": "visual",
       "title": "Визуалы",
-      "level": "error",
-      "detail": "Обнаружена ошибка"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     },
     {
       "id": "telegram",
       "title": "Telegram",
-      "level": "ok",
-      "detail": "Проверка пройдена"
+      "level": "error",
+      "detail": "Обнаружена ошибка"
     },
     {
       "id": "max",
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-14T17:51:12.871999+00:00",
+    "generated_at": "2026-10-14T18:08:53.729333+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -91,7 +91,7 @@
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-14T17:51:12.871999+00:00",
+    "generated_at": "2026-10-14T18:08:53.729333+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
@@ -111,7 +111,7 @@
       }
     }
   },
-  "failed_visual_count": 10,
+  "failed_visual_count": 0,
   "rostok": {
     "published_today": 3,
     "daily_limit": 4,
