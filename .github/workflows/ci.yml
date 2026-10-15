@@ -18,6 +18,10 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: max/package-lock.json
+      - name: Install PDF parser for synthetic preflight tests
+        run: python3 -m pip install --disable-pip-version-check 'pypdf==6.20.1'
+      - name: Editorial preflight regression tests (read-only, no publication)
+        run: python3 tests/editorial_preflight.test.py
       - name: Tests
         run: |
           node tests/live-state.test.mjs
