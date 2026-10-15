@@ -19,7 +19,7 @@ jobs:
           cache: npm
           cache-dependency-path: max/package-lock.json
       - name: Editorial preflight regression tests (read-only, no publication)
-        run: python3 -m unittest discover -s tests -p 'editorial_preflight.test.py'
+        run: python3 tests/editorial_preflight.test.py
       - name: Tests
         run: |
           node tests/live-state.test.mjs
