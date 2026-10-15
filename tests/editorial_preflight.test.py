@@ -62,6 +62,31 @@ class EditorialPreflightTests(unittest.TestCase):
             self.assertIn("generic_opening", codes)
             self.assertIn("Не определяет авторство", report["disclaimer"])
 
+    def test_pdf_metadata_and_blank_text_layer(self):
+        from pypdf import PdfWriter
+        with tempfile.TemporaryDirectory() as root:
+            valid = Path(root) / "valid.pdf"
+            writer = PdfWriter()
+            writer.add_blank_page(width=240, height=300)
+            writer.add_metadata({"/Title": "Отчёт", "/Author": "Автор"})
+            with valid.open("wb") as output:
+                writer.write(output)
+            report = gate.run(valid)
+            self.assertEqual(report["checks"]["metadata"], "PASS", report)
+            self.assertNotIn("missing_title", {i["code"] for i in report["findings"]})
+            self.assertIn("missing_text_layer", {i["code"] for i in report["findings"]})
+
+            invalid = Path(root) / "without-metadata.pdf"
+            writer = PdfWriter()
+            writer.add_blank_page(width=240, height=300)
+            with invalid.open("wb") as output:
+                writer.write(output)
+            report = gate.run(invalid)
+            codes = {i["code"] for i in report["findings"]}
+            self.assertIn("missing_title", codes)
+            self.assertIn("missing_author", codes)
+            self.assertEqual(report["status"], "FIX")
+
     def test_plain_text_has_no_fake_metadata_obligation(self):
         with tempfile.TemporaryDirectory() as root:
             path = Path(root) / "draft.md"
