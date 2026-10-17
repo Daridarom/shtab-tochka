@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-17T09:59:46.610097+00:00",
+  "generated_at": "2026-10-17T10:00:51.617972+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -8,8 +8,8 @@
     {
       "id": "system",
       "title": "Система",
-      "level": "warn",
-      "detail": "Требует внимания"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     },
     {
       "id": "visual",
@@ -75,7 +75,7 @@
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-17T09:59:46.610097+00:00",
+    "generated_at": "2026-10-17T10:00:51.617972+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -91,7 +91,7 @@
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-17T09:59:46.610097+00:00",
+    "generated_at": "2026-10-17T10:00:51.617972+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
@@ -113,12 +113,12 @@
   },
   "failed_visual_count": 0,
   "rostok": {
-    "published_today": 0,
+    "published_today": 1,
     "daily_limit": 4,
     "unresolved": 0,
     "next_slot": null,
-    "queue": 2,
-    "total_published": 97
+    "queue": 1,
+    "total_published": 98
   },
   "publication_unresolved": 0,
   "publication_delivery_errors": 0
