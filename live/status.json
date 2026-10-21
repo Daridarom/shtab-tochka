@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-10-18T12:53:07.608737+00:00",
+  "generated_at": "2026-10-21T19:40:30.334167+00:00",
   "ttl_seconds": 120,
   "visibility": "public_aggregates",
   "detail_available": false,
@@ -14,8 +14,8 @@
     {
       "id": "visual",
       "title": "Визуалы",
-      "level": "error",
-      "detail": "Обнаружена ошибка"
+      "level": "ok",
+      "detail": "Проверка пройдена"
     },
     {
       "id": "telegram",
@@ -44,8 +44,8 @@
     {
       "id": "reliability",
       "title": "Надёжность",
-      "level": "error",
-      "detail": "Обнаружена ошибка"
+      "level": "warn",
+      "detail": "Требует внимания"
     },
     {
       "id": "model_eval",
@@ -62,20 +62,20 @@
     {
       "id": "rostok",
       "title": "Росток",
-      "level": "warn",
-      "detail": "Требует внимания"
+      "level": "error",
+      "detail": "Обнаружена ошибка"
     },
     {
       "id": "publications",
       "title": "Публикации",
-      "level": "warn",
-      "detail": "Требует внимания"
+      "level": "error",
+      "detail": "Обнаружена ошибка"
     }
   ],
   "workflows": [],
   "task_summary": {
     "schema": "tasks-public-1",
-    "generated_at": "2026-10-18T12:53:07.608737+00:00",
+    "generated_at": "2026-10-21T19:40:30.334167+00:00",
     "ttl_seconds": 21600,
     "authority": "project TASKS",
     "partial": true,
@@ -85,13 +85,13 @@
     "visibility": "private",
     "proposal_count": 11,
     "today_complete": false,
-    "stale_rows": 0,
+    "stale_rows": 3,
     "missing_sources": [],
-    "missing_source_count": 0
+    "missing_source_count": 4
   },
   "inbox_summary": {
     "schema": "inbox-summary-1",
-    "generated_at": "2026-10-18T12:53:07.608737+00:00",
+    "generated_at": "2026-10-21T19:40:30.334167+00:00",
     "ttl_seconds": 120,
     "detail_available": false,
     "channels": {
@@ -104,21 +104,21 @@
       },
       "max": {
         "read_ok": true,
-        "total": 1143,
-        "last_24h": 0,
+        "total": 1183,
+        "last_24h": 15,
         "last_message_at": null,
-        "attention_count": 30
+        "attention_count": 31
       }
     }
   },
-  "failed_visual_count": 5,
+  "failed_visual_count": 0,
   "rostok": {
     "published_today": 1,
     "daily_limit": 2,
     "unresolved": 0,
     "next_slot": null,
-    "queue": 2,
-    "total_published": 101
+    "queue": 1,
+    "total_published": 106
   },
   "publication_unresolved": 0,
   "publication_delivery_errors": 0
